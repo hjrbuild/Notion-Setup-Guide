@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Notion Setup Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --notion-black: #0f0f0f;
+    --notion-off: #1a1a1a;
+    --notion-mid: #2a2a2a;
+    --notion-border: #333;
+    --notion-muted: #888;
+    --notion-light: #bbb;
+    --notion-white: #f5f4f0;
+    --notion-cream: #ede9e0;
+    --accent-dl: #6b57e8;
+    --accent-widget: #2eb87e;
+    --accent-dl-dim: rgba(107,87,232,0.15);
+    --accent-widget-dim: rgba(46,184,126,0.12);
+    --serif: 'DM Serif Display', Georgia, serif;
+    --sans: 'DM Sans', sans-serif;
+    --radius: 14px;
+    --step-h: 64px;
+  }
+
+  body {
+    background: var(--notion-black);
+    color: var(--notion-white);
+    font-family: var(--sans);
+    font-weight: 300;
+    min-height: 100vh;
+    padding: 3rem 1.5rem 5rem;
+  }
+
+  /* HEADER */
+  .header {
+    text-align: center;
+    margin-bottom: 3rem;
+    animation: fadeUp 0.6s ease both;
+  }
+  .header-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--notion-muted);
+    margin-bottom: 1rem;
+  }
+  .notion-icon {
+    width: 20px; height: 20px;
+    background: var(--notion-white);
+    border-radius: 4px;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .notion-icon svg { width: 13px; height: 13px; }
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 400;
+    color: var(--notion-white);
+    line-height: 1.1;
+    margin-bottom: 0.75rem;
+  }
+  h1 em { font-style: italic; color: var(--notion-cream); }
+  .header-sub {
+    font-size: 14px;
+    color: var(--notion-muted);
+    font-weight: 300;
+  }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+  .tab {
+    padding: 10px 28px;
+    border-radius: 999px;
+    border: 0.5px solid var(--notion-border);
+    background: transparent;
+    color: var(--notion-muted);
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .tab svg { width: 15px; height: 15px; opacity: 0.6; }
+  .tab:hover { color: var(--notion-white); border-color: #555; }
+  .tab.active {
+    background: var(--notion-white);
+    color: var(--notion-black);
+    border-color: var(--notion-white);
+    font-weight: 500;
+  }
+  .tab.active svg { opacity: 1; }
+
+  /* PANEL */
+  .panel { display: none; animation: fadeUp 0.35s ease both; }
+  .panel.active { display: block; }
+
+  /* SECTION HEADER */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1rem;
+  }
+  .section-pill {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-weight: 500;
+  }
+  .pill-dl { background: var(--accent-dl-dim); color: #a89ef5; border: 0.5px solid rgba(107,87,232,0.3); }
+  .pill-widget { background: var(--accent-widget-dim); color: #5dd4a0; border: 0.5px solid rgba(46,184,126,0.25); }
+  .section-line { flex: 1; height: 0.5px; background: var(--notion-border); }
+
+  /* STEPS */
+  .steps { margin-bottom: 2rem; }
+  .step {
+    display: flex;
+    gap: 16px;
+    padding: 18px 0;
+    border-bottom: 0.5px solid var(--notion-border);
+    transition: background 0.15s;
+  }
+  .step:last-child { border-bottom: none; }
+  .step-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+  .step-num {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+  .num-dl { background: var(--accent-dl-dim); color: #a89ef5; border: 0.5px solid rgba(107,87,232,0.35); }
+  .num-wg { background: var(--accent-widget-dim); color: #5dd4a0; border: 0.5px solid rgba(46,184,126,0.3); }
+  .step-connector {
+    width: 1px;
+    flex: 1;
+    min-height: 20px;
+    margin-top: 6px;
+    background: var(--notion-border);
+  }
+  .step:last-child .step-connector { display: none; }
+  .step-body { flex: 1; padding-top: 4px; }
+  .step-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--notion-white);
+    margin-bottom: 5px;
+  }
+  .step-desc {
+    font-size: 13px;
+    color: var(--notion-muted);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+  .step-desc strong { color: var(--notion-light); font-weight: 400; }
+
+  /* TIP */
+  .tip {
+    background: var(--notion-off);
+    border: 0.5px solid var(--notion-border);
+    border-left: 2px solid var(--notion-border);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: var(--notion-muted);
+    line-height: 1.6;
+    margin-top: 0.25rem;
+  }
+  .tip strong { color: var(--notion-light); font-weight: 500; }
+
+  /* FOOTER */
+  .footer {
+    text-align: center;
+    margin-top: 3.5rem;
+    font-size: 12px;
+    color: #555;
+    letter-spacing: 0.03em;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .step { animation: fadeUp 0.4s ease both; }
+  .step:nth-child(1) { animation-delay: 0.05s; }
+  .step:nth-child(2) { animation-delay: 0.1s; }
+  .step:nth-child(3) { animation-delay: 0.15s; }
+  .step:nth-child(4) { animation-delay: 0.2s; }
+  .step:nth-child(5) { animation-delay: 0.25s; }
+  .step:nth-child(6) { animation-delay: 0.3s; }
+  .step:nth-child(7) { animation-delay: 0.35s; }
+  .step:nth-child(8) { animation-delay: 0.4s; }
+
+  .container { max-width: 620px; margin: 0 auto; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-eyebrow">
+      <span class="notion-icon">
+        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 7.5C6 4.46 8.46 2 11.5 2h50l32 32v58.5c0 3.04-2.46 5.5-5.5 5.5h-77C8.46 98 6 95.54 6 92.5V7.5z" fill="#0f0f0f"/>
+          <path d="M61.5 2l32 32h-26.5c-3.04 0-5.5-2.46-5.5-5.5V2z" fill="#555"/>
+          <rect x="22" y="42" width="56" height="6" rx="3" fill="#f5f4f0"/>
+          <rect x="22" y="56" width="40" height="6" rx="3" fill="#888"/>
+          <rect x="22" y="70" width="48" height="6" rx="3" fill="#888"/>
+        </svg>
+      </span>
+      Notion · Mobile Setup
+    </div>
+    <h1>Get Notion on your phone<br><em>& add it to your homescreen</em></h1>
+    <p class="header-sub">A quick walkthrough for iOS and Android</p>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('apple', this)">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+      Apple (iOS)
+    </button>
+    <button class="tab" onclick="switchTab('android', this)">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.523 15.341A5.98 5.98 0 0 0 18 13a5.98 5.98 0 0 0-.477-2.341l2.015-1.178a8.9 8.9 0 0 1 0 7.038l-2.015-1.178zM13 18.938V21h-2v-2.062A6.003 6.003 0 0 1 6.062 14H4v-2h2.062A6.003 6.003 0 0 1 11 6.062V4h2v2.062A6.003 6.003 0 0 1 17.938 12H20v2h-2.062A6.003 6.003 0 0 1 13 18.938zM12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0-2a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg>
+      Android
+    </button>
+  </div>
+
+  <!-- APPLE PANEL -->
+  <div class="panel active" id="panel-apple">
+
+    <div class="section-header">
+      <span class="section-pill pill-dl">Part 1 · Download</span>
+      <span class="section-line"></span>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-left"><div class="step-num num-dl">1</div><div class="step-connector"></div></div>
+        <div class="step-body">
+          <div class="step-title">Open the App Store</div>
+          <div class="step-desc">Tap the <strong>blue App Store</strong> icon on your home screen or in your dock.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="step-num num-dl">2</div><div class="step-connector"></div></div>
+        <div class="step-body">
+          <div class="step-title">Search for Notion</div>
+          <div class="step-desc">Tap <strong>Search</strong> at the bottom of the screen, then type <strong>"Notion"</strong> in the search bar.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="step-num num-dl">3</div><div class="step-connector"></div></div>
+        <div class="step-body">
+          <div class="step-title">Download &amp; install</div>
+          <div class="step-desc">Tap <strong>Get</strong> next to Notion – Notes &amp; Docs, then confirm with Face ID, Touch ID, or your Apple ID password.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="step-num num-dl">4</div></div>
+        <div class="step-body">
+          <div class="step-title">Sign in or create an account</div>
+          <div class="step-desc">Open Notion and sign in with your email, Google, or Apple account. New user? Tap <strong>Sign up</strong> to create a free account.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-header" style="margin-top: 1.75rem;">
+      <span class="section-pill pill-widget">Part 2 · Widget</span>
+      <span class="section-line"></span>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-left"><div class="step-num num-wg">5</div><div class="step-connector"></div></div>
+        <div class="step-body">
+          <div class="step-title">Long-press your home screen</div>
+          <div class="step-desc">Hold any <strong>empty area</strong> on your home screen until the icons start jiggling and the screen enters edit mode.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="step-num num-wg">6</div><div class="step-connector"></div></div>
+        <div class="step-body">
+          <div class="step-title">Tap the "+" button</div>
+          <div class="step-desc">Tap the <strong>+ icon</strong> in the top-left corner to open the widget gallery.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="step-num num-wg">7</div><div class="step-connector"></div></div>
+        <div class="step-body">
+          <div class="step-title">Find &amp; add the Notion widget</div>
+          <div class="step-desc">Search for <strong>"Notion"</strong> in the gallery. Choose your preferred size — small, medium, or large — then tap <strong>Add Widget</strong>.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="step-num num-wg">8</div></div>
+        <div class="step-body">
+          <div class="step-title">Position &amp; customize</div>
+          <div class="step-desc">Drag the widget to your preferred spot and tap <strong>Done</strong>. Long-press the widget later to edit which Notion page it displays.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip">
+      <strong>Tip:</strong> You can add multiple Notion widgets pointing to different pages — great for pinning your daily notes, task list, or a favorites page.
+    </div>
+  </div>
+
+  <!-- ANDROID PANEL -->
+  <div class="panel" id="panel-android">
+
+    <div class="section-header">
+      <span class="section-pill pill-dl">Part 1 · Download</span>
+      <span class="section-line"></span>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-left"><div class="step-num num-dl">1</div><div class="step-connector"></div></div>
+        <div class="step-body">
+          <div class="step-title">Open Google Play Store</div>
+          <div class="step-desc">Tap the <strong>Play Store</strong> icon on your home screen or in your app drawer.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="step-num num-dl">2</div><div class="step-connector"></div></div>
+        <div class="step-body">
+          <div class="step-title">Search for Notion</div>
+          <div class="step-desc">Tap the <strong>search bar</strong> at the top and type "Notion." Look for the official <strong>Notion – Notes &amp; Docs</strong> app.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="step-num num-dl">3</div><div class="step-connector"></div></div>
+        <div class="step-body">
+          <div class="step-title">Install the app</div>
+          <div class="step-desc">Tap <strong>Install</strong> and wait for the download to complete. The app installs automatically.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="step-num num-dl">4</div></div>
+        <div class="step-body">
+          <div class="step-title">Sign in or create an account</div>
+          <div class="step-desc">Open Notion and sign in with your email or Google account. New user? Tap <strong>Sign up</strong> to create a free account.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-header" style="margin-top: 1.75rem;">
+      <span class="section-pill pill-widget">Part 2 · Widget</span>
+      <span class="section-line"></span>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-left"><div class="step-num num-wg">5</div><div class="step-connector"></div></div>
+        <div class="step-body">
+          <div class="step-title">Long-press an empty area</div>
+          <div class="step-desc">Hold any <strong>empty spot</strong> on your home screen until a menu or home screen edit mode appears.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="step-num num-wg">6</div><div class="step-connector"></div></div>
+        <div class="step-body">
+          <div class="step-title">Tap "Widgets"</div>
+          <div class="step-desc">Select <strong>Widgets</strong> from the options that appear — usually at the bottom of the screen.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="step-num num-wg">7</div><div class="step-connector"></div></div>
+        <div class="step-body">
+          <div class="step-title">Find the Notion widget</div>
+          <div class="step-desc">Scroll through the widget list or search for <strong>"Notion."</strong> Long-press the widget to pick it up and drag it.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="step-num num-wg">8</div></div>
+        <div class="step-body">
+          <div class="step-title">Drop &amp; configure</div>
+          <div class="step-desc">Drag the widget to your desired home screen position and release. Tap it to choose which <strong>Notion page</strong> it links to.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip">
+      <strong>Note:</strong> Widget steps may vary slightly depending on your device manufacturer (Samsung, Pixel, OnePlus, etc.), but the general flow is the same across all Android phones.
+    </div>
+  </div>
+
+  <div class="footer">notion.so &nbsp;·&nbsp; Available on iOS &amp; Android</div>
+
+</div>
+
+<script>
+  function switchTab(platform, el) {
+    document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+    const panel = document.getElementById('panel-' + platform);
+    panel.classList.add('active');
+    panel.style.animation = 'none';
+    panel.offsetHeight;
+    panel.style.animation = '';
+  }
+</script>
+
+</body>
+</html>
